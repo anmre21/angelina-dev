@@ -8,8 +8,14 @@ description: Pics of my dogs!
 from pathlib import Path
 from itertools import islice
 import datetime
+import os
 
-src = Path('../src')
+# print(str(Path('angelina-dev/')))
+# while str(Path.cwd().parents) != 'angelina-dev':
+#     print(str(Path.cwd()))
+#     os.chdir('..')
+#     break
+src = Path('./src')
 assert src.exists()
 
 for file in src.iterdir():
