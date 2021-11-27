@@ -1,24 +1,46 @@
 * {
     font-family: 'Karla', sans-serif;
     /* DEBUGGING */
-    /* border-radius: 1;
-    border-color: red;
+    /* border-color: red;
     border-style: solid; */
 }
 
 div {
     text-align: center;
-    margin: 10% 25% 10%;
+    margin: 5% 25% 5%;
+}
+
+ul.navbar {
+    margin: 5% 25% 0;
+    list-style-type: none;
+    /* margin: 0; */
+    padding: 0;
+}
+
+ul.navbar li {
+    display: inline;
+}
+
+.center {
+    text-align: center;
 }
 
 h1 {
-    color: #4D8B31;
+    color: #729B79;
     font-size: 50pt;
     font-weight: 700;
 }
 
-p {
+p, a {
     color: #1E212B;
     font-size: 18pt;
     font-weight: 100;
+}
+
+a:hover {
+    background-color: #FFC800;
+}
+
+a:visited {
+    color: #1E212B;
 }
