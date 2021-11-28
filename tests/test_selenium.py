@@ -5,6 +5,8 @@ import queue
 
 import selenium
 import selenium.webdriver
+from selenium.webdriver.chrome.service import Service
+from webdriver_manager.chrome import ChromeDriverManager
 from selenium.webdriver.common.by import By
 
 
@@ -19,21 +21,8 @@ def test_selenium():
     options = selenium.webdriver.chrome.options.Options()
     options.add_argument("--headless")
 
-    # chromedriver is not in the PATH, so we need to provide selenium with
-    # a full path to the executable.
-    node_modules_bin = subprocess.run(
-        ["npm", "bin"],
-        stdout=subprocess.PIPE,
-        universal_newlines=True,
-        check=True
-    )
-    node_modules_bin_path = node_modules_bin.stdout.strip()
-    chromedriver_path = Path(node_modules_bin_path) / "chromedriver"
-
-    driver = selenium.webdriver.Chrome(
-        options=options,
-        executable_path=str(chromedriver_path),
-    )
+    s=Service(ChromeDriverManager().install())
+    driver = selenium.webdriver.Chrome(service=s, options=options)
 
     # An implicit wait tells WebDriver to poll the DOM for a certain amount of
     # time when trying to find any element (or elements) not immediately
@@ -56,7 +45,10 @@ def test_selenium():
     while len(links) > 0:
         # Visit next link in the list
         link = links.pop(0)
-        print(f"Testing {link}")
+        # If link is not localhost, skip
+        if "http://127.0.0.1:5000/" not in link:
+            continue
+        # print(f"Testing {link}")
         driver.get(link)
 
         # Check if page does not exist
@@ -71,6 +63,14 @@ def test_selenium():
             print(f"[ERROR] Navbar not found, page may be empty: {link}")
             exit(1)
 
+        # If it's a blog post, print title
+        if "/blog/" in link:
+            try:
+                print("Blog post:", driver.find_element(By.TAG_NAME, "h1").text)
+            except:
+                print(f"[ERROR] Title not found, page may be empty: {link}")
+                exit(1)
+
         # Add more links to list
         visited.append(link)
         new_links = driver.find_elements(By.XPATH, "//a[@href]")
@@ -78,33 +78,6 @@ def test_selenium():
         new_links = new_links.difference(visited, set(links))
         links.extend(new_links)
         # print(f"Link set = ", links)
-
-    # ===============================================
-    # # Find the search input box, which looks like this:
-    # #   <input name="q" type="text">
-    # input_element = driver.find_element_by_xpath("//input[@name='q']")
-
-    # # Type "hello world" into the search box and click submit
-    # input_element.send_keys("hello world")
-    # input_element.submit()
-
-    # # Find the search results, which look something like this:
-    # #   <div class="g">
-    # #     <div class="r">
-    # #       <a href="https://en.wikipedia.org/wiki/%22Hello,_World!%22_program">
-    # #         <h3>
-    # #           "Hello, World!" program - Wikipedia
-    # #         </h3>
-    # #       </a>
-    # #     </div>
-    # #   </div>
-    # results = driver.find_elements_by_xpath('//div[@class="g"]//a//h3')
-
-    # # Print search results, ignoring non-standard search results which lack
-    # # text, like "Videos" or "People also ask".
-    # for result in results:
-    #     if result.text:
-    #         print(result.text)
 
     # Cleanup
     driver.quit()
