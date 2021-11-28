@@ -48,6 +48,10 @@ h1 {
     font-weight: 700;
 }
 
+h2 {
+    font-size: 25pt;
+}
+
 p, a {
     color: #1E212B;
     font-size: 18pt;
