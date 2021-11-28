@@ -7,6 +7,8 @@ Key features:
 - Hosted on Heroku
 - Custom designed :)
 - Converts Markdown blog posts into HTML
-- Checks Markdown format using git pre-commit
+- Uses git pre-commit hook to:
+    - Check Markdown formatting
+    - Test localhost website using Selenium on Google Chrome
 
 Thanks for checking it out!

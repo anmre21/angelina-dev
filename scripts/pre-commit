@@ -1,7 +1,20 @@
 #!/usr/bin/env bash
 
 echo "Running pre-commit hook"
+if pgrep -f app.py &> /dev/null; then
+    echo "angelina-dev already running locally"
+    SHUTDOWN_AFTER=False
+else
+    echo "starting angelina-dev locally..."
+    python3 app.py &
+    SHUTDOWN_AFTER=True
+fi
 python3 tests/test_validate_markdown.py && python3 tests/test_selenium.py
+
+if $SHUTDOWN_AFTER; then
+    echo "shutting down angelina-dev ..."
+    pkill -f app.py || true
+fi
 
 # $? stores exit value of the last command
 if [ $? -ne 0 ]; then
