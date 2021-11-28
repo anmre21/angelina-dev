@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 
 echo "Running pre-commit hook"
-python3 validate-markdown.py
+python3 tests/test_validate_markdown.py
 
 # $? stores exit value of the last command
 if [ $? -ne 0 ]; then
