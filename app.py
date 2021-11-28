@@ -1,6 +1,5 @@
 import flask
 import flask_flatpages
-import pdb
 
 # Config
 DEBUG = True
